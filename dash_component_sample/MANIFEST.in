@@ -1,0 +1,5 @@
+include dash_component_sample/dash_component_sample.min.js
+include dash_component_sample/dash_component_sample.dev.js
+include dash_component_sample/metadata.json
+include dash_component_sample/package.json
+include README.md
