@@ -25,14 +25,12 @@ export default class UrlObserver extends Component {
     componentDidMount() {
         const _this = this;
         this.observer = new MutationObserver(function (mutations) {
-            console.log('observer');
             _this.check();
         });
         this.observer.observe(document, {childList: true, subtree: true});
 
         history.replaceState(null, null, null);
         window.addEventListener('popstate', () => {
-            console.log('popstate');
             this.check();
         });
     }

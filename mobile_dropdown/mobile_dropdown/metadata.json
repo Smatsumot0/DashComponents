@@ -16,7 +16,7 @@
         "modifiers": [],
         "params": [
           {
-            "name": "opt",
+            "name": "e",
             "type": null
           }
         ],
@@ -36,6 +36,20 @@
       },
       {
         "name": "close",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "scroll",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "getOption",
         "docblock": null,
         "modifiers": [],
         "params": [],

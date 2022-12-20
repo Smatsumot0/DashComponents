@@ -64,7 +64,7 @@ window["life_span_storage"] =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "273d9b27ce8c9c48060b";
+/******/ 	var hotCurrentHash = "1c1829fa10818bdbe5b5";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -836,7 +836,7 @@ window["life_span_storage"] =
 /******/ 	        var srcFragments = src.split('/');
 /******/ 	        var fileFragments = srcFragments.slice(-1)[0].split('.');
 /******/
-/******/ 	        fileFragments.splice(1, 0, "v0_0_1m1671420917");
+/******/ 	        fileFragments.splice(1, 0, "v1_1_4m1671434311");
 /******/ 	        srcFragments.splice(-1, 1, fileFragments.join('.'))
 /******/
 /******/ 	        return srcFragments.join('/');
@@ -31386,7 +31386,18 @@ var App = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, App);
     _this = _super.call(this);
     _this.state = {
-      value: ''
+      session: {
+        id: 'test',
+        data: 'session'
+      },
+      local: {
+        id: 'test',
+        data: {
+          type: 'local',
+          data: 'test'
+        },
+        storage_type: 'local'
+      }
     };
     _this.setProps = _this.setProps.bind(_assertThisInitialized(_this));
     return _this;
@@ -31401,7 +31412,9 @@ var App = /*#__PURE__*/function (_Component) {
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_lib__WEBPACK_IMPORTED_MODULE_1__["LifeSpanStorage"], _extends({
         setProps: this.setProps
-      }, this.state)));
+      }, this.state.session)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_lib__WEBPACK_IMPORTED_MODULE_1__["LifeSpanStorage"], _extends({
+        setProps: this.setProps
+      }, this.state.local)));
     }
   }]);
   return App;
@@ -31471,14 +31484,100 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 var LifeSpanStorage = /*#__PURE__*/function (_Component) {
   _inherits(LifeSpanStorage, _Component);
   var _super = _createSuper(LifeSpanStorage);
-  function LifeSpanStorage() {
+  function LifeSpanStorage(props) {
+    var _this;
     _classCallCheck(this, LifeSpanStorage);
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.key = _this.props.id;
+    _this.timestampKey = _this.props.id + '-timestamp';
+    _this.storage = _this.props.storage_type === 'session' ? sessionStorage : localStorage;
+    return _this;
   }
+
+  /**
+   * コンポーネントがマウントされる直前に呼ばれる
+   */
   _createClass(LifeSpanStorage, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+      if (this.props.data || this.props.data == 0) {
+        // dataがある場合、セッションストレージに保存
+        this.setItem(this.props.data);
+      } else {
+        // dataが空の場合、セッションストレージから取得する
+        this.props.setProps(this.getItem());
+      }
+
+      // 10秒ごとに保存期限をチェック
+      if (this.props.limit) {
+        this.interval = setInterval(function () {
+          var timestamp = _this2.getItem().timestamp;
+          if (timestamp) {
+            // 期限切れの場合削除
+            var now = Date.now();
+            if (Date.now() - Number(timestamp) > _this2.props.limit) {
+              _this2.storage.removeItem(_this2.key);
+              _this2.storage.removeItem(_this2.timestampKey);
+              if (_this2.props.reload) {
+                location.reload();
+              }
+            }
+          }
+        }, 10000);
+      }
+      this.getItem();
+    }
+
+    /**
+     * コンポーネントが更新される直前に呼ばれる
+     */
+  }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
-      console.log(this.props);
+      if (JSON.stringify(this.props.data) !== JSON.stringify(this.getItem().data)) {
+        this.setItem(this.props.data);
+        this.props.setProps(this.getItem());
+      }
+    }
+
+    /**
+     * コンポーネントが破棄される直前に呼ばれる
+     */
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
+    }
+
+    /**
+     * セッションストレージにデータを保存
+     * @param {*} data
+     */
+  }, {
+    key: "setItem",
+    value: function setItem(data) {
+      this.storage.setItem(this.key, JSON.stringify(data));
+      this.storage.setItem(this.timestampKey, Date.now());
+    }
+
+    /**
+     * セッションストレージからデータを取得
+     * @returns
+     */
+  }, {
+    key: "getItem",
+    value: function getItem() {
+      var data = this.storage.getItem(this.key);
+      try {
+        data = JSON.parse(data);
+      } catch (error) {}
+      return {
+        data: data,
+        timestamp: this.storage.getItem(this.timestampKey)
+      };
     }
   }, {
     key: "render",
@@ -31492,10 +31591,16 @@ var LifeSpanStorage = /*#__PURE__*/function (_Component) {
   return LifeSpanStorage;
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
-LifeSpanStorage.defaultProps = {};
+LifeSpanStorage.defaultProps = {
+  reload: false,
+  storage_type: 'session'
+};
 LifeSpanStorage.propTypes = {
   id: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.string.isRequired,
   data: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.number, prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.array, prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.object]),
+  limit: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.number,
+  reload: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.bool,
+  storage_type: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.oneOfType(['local', 'session']),
   setProps: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.func
 };
 

@@ -2,7 +2,7 @@
 name = "UrlObserver"
 uuid = "1b08a953-4be3-4667-9a23-00765f4a3a5c"
 authors = ["s_matsumoto <s_matsumoto@thinkup-sol.co.jp>"]
-version = "1.0.9"
+version = "1.0.10"
 
 [deps]
 Dash = "1b08a953-4be3-4667-9a23-3db579824955"

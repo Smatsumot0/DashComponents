@@ -15,16 +15,22 @@ Keyword arguments:
 
 - id (string; required)
 
-- data (string | number | list | dict; optional)"""
+- data (string | number | list | dict; optional)
+
+- limit (number; optional)
+
+- reload (boolean; default False)
+
+- storage_type (default 'session')"""
     _children_props = []
     _base_nodes = ['children']
     _namespace = 'life_span_storage'
     _type = 'LifeSpanStorage'
     @_explicitize_args
-    def __init__(self, id=Component.REQUIRED, data=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'data']
+    def __init__(self, id=Component.REQUIRED, data=Component.UNDEFINED, limit=Component.UNDEFINED, reload=Component.UNDEFINED, storage_type=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'data', 'limit', 'reload', 'storage_type']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'data']
+        self.available_properties = ['id', 'data', 'limit', 'reload', 'storage_type']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

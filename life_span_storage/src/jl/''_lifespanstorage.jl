@@ -14,9 +14,12 @@ which is editable by the user.
 Keyword arguments:
 - `id` (String; required)
 - `data` (String | Real | Array | Dict; optional)
+- `limit` (Real; optional)
+- `reload` (Bool; optional)
+- `storage_type` (optional)
 """
 function ''_lifespanstorage(; kwargs...)
-        available_props = Symbol[:id, :data]
+        available_props = Symbol[:id, :data, :limit, :reload, :storage_type]
         wild_props = Symbol[]
         return Component("''_lifespanstorage", "LifeSpanStorage", "life_span_storage", available_props, wild_props; kwargs...)
 end

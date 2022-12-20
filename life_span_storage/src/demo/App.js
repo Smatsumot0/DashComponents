@@ -1,14 +1,20 @@
 /* eslint no-magic-numbers: 0 */
 import React, {Component} from 'react';
-
-import { LifeSpanStorage } from '../lib';
+import {LifeSpanStorage} from '../lib';
 
 class App extends Component {
-
     constructor() {
         super();
         this.state = {
-            value: ''
+            session: {
+                id: 'test',
+                data: 'session',
+            },
+            local: {
+                id: 'test',
+                data: {type: 'local', data: 'test'},
+                storage_type: 'local',
+            },
         };
         this.setProps = this.setProps.bind(this);
     }
@@ -22,10 +28,14 @@ class App extends Component {
             <div>
                 <LifeSpanStorage
                     setProps={this.setProps}
-                    {...this.state}
+                    {...this.state.session}
+                />
+                <LifeSpanStorage
+                    setProps={this.setProps}
+                    {...this.state.local}
                 />
             </div>
-        )
+        );
     }
 }
 

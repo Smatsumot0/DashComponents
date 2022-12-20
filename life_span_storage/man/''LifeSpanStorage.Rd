@@ -10,13 +10,20 @@ ExampleComponent is an example component. It takes a property, `label`, and di
 }
 
 \usage{
-''LifeSpanStorage(id=NULL, data=NULL)
+''LifeSpanStorage(id=NULL, data=NULL, limit=NULL, reload=NULL,
+storage_type=NULL)
 }
 
 \arguments{
 \item{id}{Character. }
 
 \item{data}{Character | numeric | unnamed list | named list. }
+
+\item{limit}{Numeric. }
+
+\item{reload}{Logical. }
+
+\item{storage_type}{}
 }
 
 \value{named list of JSON elements corresponding to React.js properties and their values}

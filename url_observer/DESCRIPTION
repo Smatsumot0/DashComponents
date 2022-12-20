@@ -1,6 +1,6 @@
 Package: urlObserver
 Title: Project Description
-Version: 1.0.9
+Version: 1.0.10
 Description: Project Description
 Depends: R (>= 3.0.2)
 Imports: 

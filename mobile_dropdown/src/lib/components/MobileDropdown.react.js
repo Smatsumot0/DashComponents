@@ -6,17 +6,23 @@ import styled from 'styled-components';
 /* -----------------------------------------------------------
  * Style
  * -----------------------------------------------------------*/
-const List = styled.ul`
+const ListWrapper = styled.div`
     box-sizing: border-box;
     width: 100%;
-    list-style: none;
     padding: 0;
     margin: 0;
     border: solid thin black;
     border-top: none;
-    overflow-y: scroll;
+    overflow: auto;
     position: fixed;
     z-index: 150;
+`;
+const List = styled.ul`
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: max-content;
 `;
 
 const ListItem = styled.li`
@@ -80,12 +86,27 @@ const Background = styled.div`
 export default class MobileDropdown extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: null, open: false};
+        this.state = {
+            open: false,
+        };
+        this.wrapRef = React.createRef();
+        this.listRef = React.createRef();
+
+        this.options = this.props.options;
+        this.opt = {value: null, label: null};
+
         this.listStyle = {display: 'none'};
-        this.pos = {};
+        this.pos = 1;
         // eslint-disable-next-line no-magic-numbers
         this.id = Math.random().toString(32).substring(2);
         this.closeStyle = {display: 'none'};
+
+        // bind
+        this.toggle = this.toggle.bind(this);
+        this.select = this.select.bind(this);
+        this.clear = this.clear.bind(this);
+        this.close = this.close.bind(this);
+        this.scroll = this.scroll.bind(this);
     }
 
     toggle() {
@@ -111,13 +132,16 @@ export default class MobileDropdown extends Component {
         this.setState({open: !this.state.open});
     }
 
-    select(opt) {
+    select(e) {
+        const opt = e.currentTarget.dataset;
         this.listStyle = this.closeStyle;
+        this.opt = {value: opt.value, label: opt.label};
         this.setState({open: false});
         this.props.setProps({value: opt.value});
     }
 
     clear(e) {
+        this.opt = {value: null, label: null};
         this.props.setProps({value: null});
         if (e) {
             e.stopPropagation();
@@ -129,39 +153,82 @@ export default class MobileDropdown extends Component {
         this.setState({open: false});
     }
 
-    render() {
-        const {id, className, options, value, notfoundMsg, clearable} =
-            this.props;
+    scroll() {
+        // 一番上までスクロールされたらtop:1
+        const scrollTop = this.wrapRef.current.scrollTop;
+        if (scrollTop <= 0) {
+            // ios bug
+            this.pos = 1;
+            return;
+        }
 
-        let label = null;
-        if (value !== null) {
-            if (options) {
-                const result = options.filter((opt) => opt.value === value);
-                if (result.length > 0) {
-                    // ラベル初期設定
-                    label = result[0].label;
-                    // eslint-disable-next-line react/no-direct-mutation-state
-                    this.state.value = result[0].value;
-                } else {
-                    // optionに存在しない値
-                    // eslint-disable-next-line react/no-direct-mutation-state
-                    this.state.value = null;
-                }
+        // 一番下までスクロールされたらtop: height - 1
+        const listHeight = this.listRef.current.scrollHeight;
+        const wrapHeight = this.wrapRef.current.getBoundingClientRect().height;
+        if (wrapHeight + scrollTop > listHeight) {
+            this.pos = listHeight - 1;
+            return;
+        }
+
+        this.pos = null;
+    }
+
+    componentDidUpdate() {
+        // optionsの変更
+        if (
+            JSON.stringify(this.options) !== JSON.stringify(this.props.options)
+        ) {
+            const opt = this.getOption();
+            this.opt = opt;
+            this.options = this.props.options;
+            this.props.setProps({value: opt.value});
+        }
+
+        // valueの変更
+        // eslint-disable-next-line eqeqeq
+        if (this.opt.value != this.props.value) {
+            this.opt = this.getOption();
+        }
+
+        // スクロール位置調整
+        if (this.pos) {
+            this.wrapRef.current.scrollTop = this.pos;
+        }
+    }
+
+    getOption() {
+        const {options, value} = this.props;
+        if (value !== null && options) {
+            // eslint-disable-next-line eqeqeq
+            const result = options.filter((opt) => opt.value == value);
+            if (result.length > 0) {
+                return {label: result[0].label, value: value};
             }
         }
+        // optionに存在しない値
+        return {label: null, value: null};
+    }
+
+    render() {
+        const {id, className, options, notfoundMsg, clearable} = this.props;
 
         const li = [];
         if (options && options.length > 0) {
             for (const opt of options) {
                 li.push(
-                    <ListItem key={opt.value} onClick={() => this.select(opt)}>
+                    <ListItem
+                        key={opt.value}
+                        data-value={opt.value}
+                        data-label={opt.label}
+                        onClick={this.select}
+                    >
                         <span>{opt.label}</span>
                     </ListItem>
                 );
             }
         } else {
             li.push(
-                <ListItem key={'not_found'} onClick={() => this.select({})}>
+                <ListItem key={'not_found'} onClick={this.select}>
                     <span>
                         {notfoundMsg ? notfoundMsg : 'No results found'}
                     </span>
@@ -181,27 +248,30 @@ export default class MobileDropdown extends Component {
             >
                 <Background
                     style={{display: this.state.open ? 'block' : 'none'}}
-                    onTouchEnd={() => this.close()}
+                    onTouchEnd={this.close}
                 ></Background>
                 <Value
                     id={this.id + '-value'}
                     className="mobile_dropdown-value"
-                    onTouchEnd={() => this.toggle()}
+                    onTouchEnd={this.toggle}
                 >
-                    <Label>{label}</Label>
+                    <Label>{this.opt.label}</Label>
                     {clearable ? (
-                        <Icon onTouchEnd={(e) => this.clear(e)}>
+                        <Icon onTouchEnd={this.clear}>
                             <VscChromeClose />
                         </Icon>
                     ) : null}
                 </Value>
-                <List
-                    id={this.id + '-list'}
+                <ListWrapper
                     className="mobile_dropdown-list"
                     style={this.listStyle}
+                    ref={this.wrapRef}
+                    onScroll={this.scroll}
                 >
-                    {li}
-                </List>
+                    <List id={this.id + '-list'} ref={this.listRef}>
+                        {li}
+                    </List>
+                </ListWrapper>
             </div>
         );
     }
