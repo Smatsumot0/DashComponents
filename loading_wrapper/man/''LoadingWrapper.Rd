@@ -11,7 +11,8 @@ ExampleComponent is an example component. It takes a property, `label`, and di
 
 \usage{
 ''LoadingWrapper(children=NULL, id=NULL, className=NULL, ignores=NULL,
-interval=NULL, is_loading=NULL, targetClassName=NULL)
+interval=NULL, is_loading=NULL, is_stop=NULL,
+targetClassName=NULL)
 }
 
 \arguments{
@@ -26,6 +27,8 @@ interval=NULL, is_loading=NULL, targetClassName=NULL)
 \item{interval}{Numeric. }
 
 \item{is_loading}{Logical. }
+
+\item{is_stop}{Logical. }
 
 \item{targetClassName}{Character. }
 }

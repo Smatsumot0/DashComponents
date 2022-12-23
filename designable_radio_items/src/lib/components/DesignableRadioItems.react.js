@@ -34,7 +34,7 @@ export default class DesignableRadioItems extends Component {
         this.setState({value, move: befIndex === -1 ? 0 : index - befIndex});
     }
     render() {
-        const {id, options, className, value} = this.props;
+        const {id, options, className, value, readonly} = this.props;
         if (
             this.state.value &&
             options.map((opt) => opt.value).indexOf(this.state.value) === -1
@@ -78,7 +78,7 @@ export default class DesignableRadioItems extends Component {
         }
 
         return (
-            <div id={id} className={className}>
+            <div id={id} className={className + (readonly ? ' readonly' : '')}>
                 {optList}
             </div>
         );

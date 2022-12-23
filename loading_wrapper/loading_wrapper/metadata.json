@@ -132,6 +132,17 @@
         "required": false,
         "description": ""
       },
+      "is_stop": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
       "setProps": {
         "type": {
           "name": "func"

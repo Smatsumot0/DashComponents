@@ -7,7 +7,7 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            // readonly: true,
+            readonly: true,
         };
         this.setProps = this.setProps.bind(this);
     }
@@ -17,7 +17,7 @@ class App extends Component {
     }
 
     render() {
-        let options = [];
+        const options = [];
         for (let i = 0; i < 5; i++) {
             options.push({label: 'TEST' + i, value: i});
         }

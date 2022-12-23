@@ -104,7 +104,7 @@ export default class LoadingWrapper extends Component {
      * @param {*} isLoading
      */
     setLoading(isLoading) {
-        if (isLoading) {
+        if (!this.props.is_stop && isLoading) {
             console.log(this.props.id, 'start');
             this.props.setProps({is_loading: true});
             this.setState({isLoading: true});
@@ -179,6 +179,7 @@ export default class LoadingWrapper extends Component {
 
 LoadingWrapper.defaultProps = {
     interval: 1000,
+    is_stop: false,
 };
 
 LoadingWrapper.propTypes = {
@@ -189,5 +190,6 @@ LoadingWrapper.propTypes = {
     interval: PropTypes.number,
     ignores: PropTypes.arrayOf(PropTypes.string),
     is_loading: PropTypes.bool,
+    is_stop: PropTypes.bool,
     setProps: PropTypes.func,
 };

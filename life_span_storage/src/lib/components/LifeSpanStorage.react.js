@@ -37,7 +37,6 @@ export default class LifeSpanStorage extends Component {
                 const timestamp = this.getItem().timestamp;
                 if (timestamp) {
                     // 期限切れの場合削除
-                    const now = Date.now();
                     if (Date.now() - Number(timestamp) > this.props.limit) {
                         this.storage.removeItem(this.key);
                         this.storage.removeItem(this.timestampKey);

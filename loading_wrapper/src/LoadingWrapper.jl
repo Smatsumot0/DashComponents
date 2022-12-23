@@ -3,7 +3,7 @@ module LoadingWrapper
 using Dash
 
 const resources_path = realpath(joinpath( @__DIR__, "..", "deps"))
-const version = "1.2.18"
+const version = "1.2.19"
 
 include("jl/''_loadingwrapper.jl")
 

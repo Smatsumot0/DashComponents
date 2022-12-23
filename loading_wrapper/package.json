@@ -1,6 +1,6 @@
 {
   "name": "loading_wrapper",
-  "version": "1.2.18",
+  "version": "1.2.19",
   "description": "Dash Loading Wrapper Component",
 
   "main": "build/index.js",

@@ -21,10 +21,11 @@ Keyword arguments:
 - `ignores` (Array of Strings; optional)
 - `interval` (Real; optional)
 - `is_loading` (Bool; optional)
+- `is_stop` (Bool; optional)
 - `targetClassName` (String; required)
 """
 function ''_loadingwrapper(; kwargs...)
-        available_props = Symbol[:children, :id, :className, :ignores, :interval, :is_loading, :targetClassName]
+        available_props = Symbol[:children, :id, :className, :ignores, :interval, :is_loading, :is_stop, :targetClassName]
         wild_props = Symbol[]
         return Component("''_loadingwrapper", "LoadingWrapper", "loading_wrapper", available_props, wild_props; kwargs...)
 end

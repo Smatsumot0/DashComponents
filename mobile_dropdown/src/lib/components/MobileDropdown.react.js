@@ -16,6 +16,7 @@ const ListWrapper = styled.div`
     overflow: auto;
     position: fixed;
     z-index: 150;
+    /* height: 100px; */
 `;
 const List = styled.ul`
     width: 100%;
@@ -95,6 +96,10 @@ export default class MobileDropdown extends Component {
         this.options = this.props.options;
         this.opt = {value: null, label: null};
 
+        this.isScroll = false;
+        this.isTouch = false;
+        this.interval = 300;
+
         this.listStyle = {display: 'none'};
         this.pos = 1;
         // eslint-disable-next-line no-magic-numbers
@@ -107,6 +112,8 @@ export default class MobileDropdown extends Component {
         this.clear = this.clear.bind(this);
         this.close = this.close.bind(this);
         this.scroll = this.scroll.bind(this);
+        this.touchStart = this.touchStart.bind(this);
+        this.touchEnd = this.touchEnd.bind(this);
     }
 
     toggle() {
@@ -153,24 +160,86 @@ export default class MobileDropdown extends Component {
         this.setState({open: false});
     }
 
+    // scroll() {
+    //     // 一番上までスクロールされたらtop:1
+    //     const scrollTop = this.wrapRef.current.scrollTop;
+    //     console.log(scrollTop);
+    //     if (scrollTop <= 0) {
+    //         // ios bug
+    //         this.pos = 1;
+    //         this.wrapRef.current.scrollTop = this.pos;
+    //         return;
+    //     }
+
+    //     // 一番下までスクロールされたらtop: height - 1
+    //     const listHeight = this.listRef.current.scrollHeight;
+    //     const wrapHeight = this.wrapRef.current.getBoundingClientRect().height;
+    //     if (wrapHeight + scrollTop > listHeight) {
+    //         this.pos = listHeight - wrapHeight - 1;
+    //         this.wrapRef.current.scrollTop = this.pos;
+    //         return;
+    //     }
+
+    //     this.pos = null;
+    // }
+
+    /**
+     * スクロール中
+     */
     scroll() {
-        // 一番上までスクロールされたらtop:1
-        const scrollTop = this.wrapRef.current.scrollTop;
-        if (scrollTop <= 0) {
-            // ios bug
-            this.pos = 1;
+        if (!this.isScroll) {
+            this.isScroll = true;
+        }
+        // スクロール終了後300msでスクロール位置設定
+        const timeout = setTimeout(() => {
+            if (this.isScroll) {
+                this.isScroll = false;
+                console.log(this.isTouch);
+                if (!this.isTouch) {
+                    this.setScrollTop();
+                }
+            }
+            clearTimeout(timeout);
+        }, this.interval);
+    }
+
+    /**
+     * タッチ開始
+     */
+    touchStart() {
+        this.isTouch = true;
+    }
+
+    /**
+     * タッチ終了
+     */
+    touchEnd() {
+        this.isTouch = false;
+        this.setScrollTop();
+    }
+
+    /**
+     * スクロール位置設定
+     * @returns
+     */
+    setScrollTop() {
+        const target = this.wrapRef.current;
+        console.log(target.scrollTop);
+        if (target.scrollTop <= 0) {
+            target.scrollTop = 1;
+            console.log('min', target.scrollTop);
             return;
         }
-
-        // 一番下までスクロールされたらtop: height - 1
-        const listHeight = this.listRef.current.scrollHeight;
-        const wrapHeight = this.wrapRef.current.getBoundingClientRect().height;
-        if (wrapHeight + scrollTop > listHeight) {
-            this.pos = listHeight - 1;
+        const height = target.getBoundingClientRect().height;
+        if (target.scrollTop + height > target.scrollHeight - 1) {
+            target.scrollTop = target.scrollHeight - height - 1;
+            console.log(
+                'max',
+                target.scrollTop,
+                target.scrollHeight - height - 1
+            );
             return;
         }
-
-        this.pos = null;
     }
 
     componentDidUpdate() {
@@ -267,6 +336,8 @@ export default class MobileDropdown extends Component {
                     style={this.listStyle}
                     ref={this.wrapRef}
                     onScroll={this.scroll}
+                    onTouchStart={this.touchStart}
+                    onTouchEnd={this.touchEnd}
                 >
                     <List id={this.id + '-list'} ref={this.listRef}>
                         {li}
