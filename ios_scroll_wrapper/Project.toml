@@ -2,7 +2,7 @@
 name = "IosScrollWrapper"
 uuid = "1b08a953-4be3-4667-9a23-e2557d76a64e"
 authors = ["s_matsumoto <s_matsumoto@thinkup-sol.co.jp>"]
-version = "1.0.2"
+version = "1.0.3"
 
 [deps]
 Dash = "1b08a953-4be3-4667-9a23-3db579824955"

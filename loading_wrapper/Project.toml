@@ -2,7 +2,7 @@
 name = "LoadingWrapper"
 uuid = "1b08a953-4be3-4667-9a23-01c776716b28"
 authors = ["s_matsumoto <s_matsumoto@thinkup-sol.co.jp>"]
-version = "1.2.19"
+version = "1.2.20"
 
 [deps]
 Dash = "1b08a953-4be3-4667-9a23-3db579824955"

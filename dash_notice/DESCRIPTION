@@ -1,0 +1,13 @@
+Package: dashNotice
+Title: Dash Notice Component
+Version: 1.1.1
+Description: Dash Notice Component
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: MIT + file LICENSE
+URL: 
+BugReports: 
+Encoding: UTF-8
+LazyData: true
+KeepSource: true

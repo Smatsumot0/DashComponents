@@ -2,7 +2,7 @@
 name = "TouchableComponent"
 uuid = "1b08a953-4be3-4667-9a23-6eb9d3f103eb"
 authors = ["s_matsumoto <s_matsumoto@thinkup-sol.co.jp>"]
-version = "2.1.8"
+version = "2.1.16"
 
 [deps]
 Dash = "1b08a953-4be3-4667-9a23-3db579824955"

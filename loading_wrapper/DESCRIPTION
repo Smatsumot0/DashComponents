@@ -1,6 +1,6 @@
 Package: loadingWrapper
 Title: Dash Loading Wrapper Component
-Version: 1.2.19
+Version: 1.2.20
 Description: Dash Loading Wrapper Component
 Depends: R (>= 3.0.2)
 Imports: 

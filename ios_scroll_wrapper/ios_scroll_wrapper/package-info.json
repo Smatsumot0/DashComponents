@@ -1,6 +1,6 @@
 {
   "name": "ios_scroll_wrapper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Dash IOS Scroll Component",
   "main": "build/index.js",
   "scripts": {

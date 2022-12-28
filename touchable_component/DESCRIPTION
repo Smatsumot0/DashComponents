@@ -1,7 +1,7 @@
 Package: touchableComponent
-Title: Dash Touchable Component
-Version: 2.1.8
-Description: Dash Touchable Component
+Title: Component to acquire coordinates and movements for smartphones
+Version: 2.1.16
+Description: Component to acquire coordinates and movements for smartphones
 Depends: R (>= 3.0.2)
 Imports: 
 Suggests: 

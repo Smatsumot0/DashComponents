@@ -1,6 +1,6 @@
 {
   "name": "mobile_dropdown",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Dash Mobile Dropdown Component",
   "main": "build/index.js",
   "scripts": {

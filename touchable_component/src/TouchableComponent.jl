@@ -3,7 +3,7 @@ module TouchableComponent
 using Dash
 
 const resources_path = realpath(joinpath( @__DIR__, "..", "deps"))
-const version = "2.1.8"
+const version = "2.1.16"
 
 include("jl/''_touchablecomponent.jl")
 

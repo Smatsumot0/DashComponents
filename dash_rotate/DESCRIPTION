@@ -1,0 +1,13 @@
+Package: dashRotate
+Title: Components for smartphones that detect screen rotation
+Version: 1.0.6
+Description: Components for smartphones that detect screen rotation
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: MIT + file LICENSE
+URL: 
+BugReports: 
+Encoding: UTF-8
+LazyData: true
+KeepSource: true

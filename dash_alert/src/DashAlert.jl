@@ -3,7 +3,7 @@ module DashAlert
 using Dash
 
 const resources_path = realpath(joinpath( @__DIR__, "..", "deps"))
-const version = "1.0.7"
+const version = "1.0.8"
 
 include("jl/''_dashalert.jl")
 
