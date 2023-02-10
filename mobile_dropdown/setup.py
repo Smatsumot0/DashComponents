@@ -7,7 +7,7 @@ with open("package.json", encoding="utf-8") as f:
 
 
 def load_readme() -> str:
-    with open("README.md") as fin:
+    with open("README.md", encoding="utf-8") as fin:
         return fin.read()
 
 

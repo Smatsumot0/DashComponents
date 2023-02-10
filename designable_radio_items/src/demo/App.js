@@ -7,7 +7,7 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            readonly: true,
+            // readonly: true,
         };
         this.setProps = this.setProps.bind(this);
     }

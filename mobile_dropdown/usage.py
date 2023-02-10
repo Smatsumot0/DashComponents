@@ -1,12 +1,7 @@
 import mobile_dropdown
-import dash
-from dash.dependencies import Input, Output
-import dash_html_components as html
+from dash import Dash, callback, html, Input, Output
 
-app = dash.Dash(__name__)
-
-app.scripts.config.serve_locally = True
-app.css.config.serve_locally = True
+app = Dash(__name__)
 
 app.layout = html.Div([
     mobile_dropdown.MobileDropdown(
@@ -17,7 +12,8 @@ app.layout = html.Div([
     html.Div(id='output')
 ])
 
-@app.callback(Output('output', 'children'), [Input('input', 'value')])
+
+@callback(Output('output', 'children'), Input('input', 'value'))
 def display_output(value):
     return 'You have entered {}'.format(value)
 
